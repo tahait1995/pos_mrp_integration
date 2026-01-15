@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 {
     'name': 'POS MRP Integration',
     'version': '18.0.1.0.0',
@@ -54,23 +54,16 @@ taha
         'stock',
     ],
     'data': [
-        # Security
+     
         'security/ir.model.access.csv',
         
-        # Views
+        
         'views/product_template_view.xml',
         'views/pos_order_view.xml',
         'views/pos_session_view.xml',
         'views/mrp_production_view.xml',
     ],
-    # JS assets disabled for initial installation - validation is done server-side
-    # 'assets': {
-    #     'point_of_sale._assets_pos': [
-    #         'pos_mrp_integration/static/src/js/pos_mrp.js',
-    #         'pos_mrp_integration/static/src/js/pos_product_screen.js',
-    #         'pos_mrp_integration/static/src/css/pos_mrp.css',
-    #     ],
-    # },
+
     'installable': True,
     'application': False,
     'auto_install': False,

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- POS Session Form View Extension -->
+  
     <record id="pos_session_form_view_mrp" model="ir.ui.view">
         <field name="name">pos.session.form.mrp</field>
         <field name="model">pos.session</field>

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- ============================================ -->
-    <!-- POS Order Form View Extension               -->
-    <!-- ============================================ -->
-    <record id="pos_order_form_view_mrp" model="ir.ui.view">
+   <record id="pos_order_form_view_mrp" model="ir.ui.view">
         <field name="name">pos.order.form.mrp</field>
         <field name="model">pos.order</field>
         <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
         <field name="arch" type="xml">
-            <!-- Add Manufacturing Orders smart button -->
+
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="action_view_mrp_productions"
                         type="object"
@@ -20,17 +17,13 @@
                 </button>
             </xpath>
             
-            <!-- Add hidden field for has_mrp_products -->
             <xpath expr="//field[@name='session_id']" position="after">
                 <field name="has_mrp_products" invisible="1"/>
             </xpath>
         </field>
     </record>
 
-    <!-- ============================================ -->
-    <!-- POS Order List View Extension               -->
-    <!-- ============================================ -->
-    <record id="pos_order_tree_view_mrp" model="ir.ui.view">
+      <record id="pos_order_tree_view_mrp" model="ir.ui.view">
         <field name="name">pos.order.list.mrp</field>
         <field name="model">pos.order</field>
         <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
@@ -41,16 +34,12 @@
         </field>
     </record>
 
-    <!-- ============================================ -->
-    <!-- POS Order Search View Extension             -->
-    <!-- ============================================ -->
-    <record id="pos_order_search_view_mrp" model="ir.ui.view">
+      <record id="pos_order_search_view_mrp" model="ir.ui.view">
         <field name="name">pos.order.search.mrp</field>
         <field name="model">pos.order</field>
         <field name="inherit_id" ref="point_of_sale.view_pos_order_filter"/>
         <field name="arch" type="xml">
-            <!-- Add filters - using search position for safety -->
-            <xpath expr="//search" position="inside">
+             <xpath expr="//search" position="inside">
                 <separator/>
                 <filter name="has_manufacturing" 
                         string="With Manufacturing Orders" 

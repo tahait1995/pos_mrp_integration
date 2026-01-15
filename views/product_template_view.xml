@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Product Template Form View Extension -->
+   
     <record id="product_template_form_view_pos_mrp" model="ir.ui.view">
         <field name="name">product.template.form.pos.mrp</field>
         <field name="model">product.template</field>
@@ -54,7 +54,7 @@
         </field>
     </record>
 
-    <!-- Product Template Tree View Extension -->
+   
     <record id="product_template_tree_view_pos_mrp" model="ir.ui.view">
         <field name="name">product.template.tree.pos.mrp</field>
         <field name="model">product.template</field>
@@ -67,7 +67,7 @@
         </field>
     </record>
 
-    <!-- Product Template Search View Extension -->
+   
     <record id="product_template_search_view_pos_mrp" model="ir.ui.view">
         <field name="name">product.template.search.pos.mrp</field>
         <field name="model">product.template</field>
