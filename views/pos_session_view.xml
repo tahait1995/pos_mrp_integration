@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- POS Session Form View Extension -->
+    <record id="pos_session_form_view_mrp" model="ir.ui.view">
+        <field name="name">pos.session.form.mrp</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_mrp_productions"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-industry"
+                        invisible="mrp_production_count == 0"
+                        groups="mrp.group_mrp_user">
+                    <field name="mrp_production_count" widget="statinfo" string="Manufacturing"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

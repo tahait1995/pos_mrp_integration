@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- POS Order Form View Extension               -->
+    <!-- ============================================ -->
+    <record id="pos_order_form_view_mrp" model="ir.ui.view">
+        <field name="name">pos.order.form.mrp</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Manufacturing Orders smart button -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_mrp_productions"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-industry"
+                        invisible="mrp_production_count == 0"
+                        groups="mrp.group_mrp_user">
+                    <field name="mrp_production_count" widget="statinfo" string="Manufacturing"/>
+                </button>
+            </xpath>
+            
+            <!-- Add hidden field for has_mrp_products -->
+            <xpath expr="//field[@name='session_id']" position="after">
+                <field name="has_mrp_products" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- POS Order List View Extension               -->
+    <!-- ============================================ -->
+    <record id="pos_order_tree_view_mrp" model="ir.ui.view">
+        <field name="name">pos.order.list.mrp</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="mrp_production_count" string="MOs" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- POS Order Search View Extension             -->
+    <!-- ============================================ -->
+    <record id="pos_order_search_view_mrp" model="ir.ui.view">
+        <field name="name">pos.order.search.mrp</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_filter"/>
+        <field name="arch" type="xml">
+            <!-- Add filters - using search position for safety -->
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter name="has_manufacturing" 
+                        string="With Manufacturing Orders" 
+                        domain="[('mrp_production_count', '&gt;', 0)]"/>
+                <filter name="has_mrp_products" 
+                        string="Contains MFG Products" 
+                        domain="[('has_mrp_products', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- MRP Production Form View Extension          -->
+    <!-- ============================================ -->
+    <record id="mrp_production_form_view_pos" model="ir.ui.view">
+        <field name="name">mrp.production.form.pos</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <!-- Add POS Order smart button in button_box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_pos_order"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-shopping-cart"
+                        invisible="not pos_order_id"
+                        groups="point_of_sale.group_pos_user">
+                    <field name="pos_order_name" widget="statinfo" string="POS Order"/>
+                </button>
+            </xpath>
+            
+            <!-- Add hidden POS fields after product_id -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="pos_order_id" invisible="1"/>
+                <field name="pos_order_line_id" invisible="1"/>
+                <field name="is_from_pos" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Separate view for POS Info group -->
+    <record id="mrp_production_form_view_pos_info" model="ir.ui.view">
+        <field name="name">mrp.production.form.pos.info</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="POS Origin" invisible="not pos_order_id" name="pos_info" col="4">
+                    <field name="pos_order_id" readonly="1" string="POS Order"/>
+                    <field name="pos_order_date" readonly="1" string="Order Date"/>
+                    <field name="pos_session_id" readonly="1" string="Session"/>
+                    <field name="pos_partner_id" readonly="1" string="Customer"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- MRP Production List/Tree View Extension     -->
+    <!-- Compatible with Odoo 18/19                  -->
+    <!-- ============================================ -->
+    <record id="mrp_production_tree_view_pos" model="ir.ui.view">
+        <field name="name">mrp.production.list.pos</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <!-- Use field position instead of tree/list element -->
+            <xpath expr="//field[@name='date_start']" position="after">
+                <field name="pos_order_name" string="POS Order" optional="show"/>
+                <field name="is_from_pos" string="From POS" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- MRP Production Search View Extension        -->
+    <!-- ============================================ -->
+    <record id="mrp_production_search_view_pos" model="ir.ui.view">
+        <field name="name">mrp.production.search.pos</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+        <field name="arch" type="xml">
+            <!-- Add filters using filter position -->
+            <xpath expr="//filter[@name='todo']" position="after">
+                <separator/>
+                <filter name="from_pos" 
+                        string="From POS Orders" 
+                        domain="[('is_from_pos', '=', True)]"/>
+                <filter name="not_from_pos" 
+                        string="Not from POS" 
+                        domain="[('is_from_pos', '=', False)]"/>
+            </xpath>
+            
+            <!-- Add search field -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="pos_order_name" string="POS Order"/>
+            </xpath>
+            
+            <!-- Add group by options -->
+            <xpath expr="//filter[@name='product']" position="after">
+                <filter name="group_by_pos_order" 
+                        string="POS Order" 
+                        context="{'group_by': 'pos_order_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- POS Manufacturing Orders Action             -->
+    <!-- ============================================ -->
+    <record id="mrp_production_action_pos" model="ir.actions.act_window">
+        <field name="name">POS Manufacturing Orders</field>
+        <field name="res_model">mrp.production</field>
+        <field name="view_mode">list,kanban,form,calendar,pivot,graph</field>
+        <field name="domain">[('is_from_pos', '=', True)]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No manufacturing orders from POS yet
+            </p>
+            <p>
+                Manufacturing orders will appear here when products with 
+                "Manufacturing from POS" enabled are sold through Point of Sale.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Menu Item for POS Manufacturing Orders      -->
+    <!-- ============================================ -->
+    <menuitem id="menu_mrp_production_pos"
+              name="POS Manufacturing"
+              parent="mrp.menu_mrp_manufacturing"
+              action="mrp_production_action_pos"
+              sequence="15"
+              groups="mrp.group_mrp_user,point_of_sale.group_pos_user"/>
+</odoo>

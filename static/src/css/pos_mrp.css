@@ -1,0 +1,41 @@
+/* POS MRP Integration Styles */
+
+/* Product card with manufacturing enabled */
+.o_pos_mrp_product {
+    position: relative;
+}
+
+.o_pos_mrp_product::after {
+    content: "⚙";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 14px;
+    color: #28a745;
+}
+
+/* Product requiring manufacturing but not ready (no BOM) */
+.o_pos_mrp_not_ready {
+    opacity: 0.7;
+    border: 2px solid #dc3545 !important;
+}
+
+.o_pos_mrp_not_ready::after {
+    content: "⚠";
+    color: #dc3545;
+}
+
+/* Manufacturing indicator in order lines */
+.o_pos_order_line.o_mrp_line {
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.o_pos_order_line.o_mrp_line::before {
+    content: "MFG";
+    font-size: 10px;
+    background-color: #28a745;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-right: 5px;
+}

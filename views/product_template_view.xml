@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Product Template Form View Extension -->
+    <record id="product_template_form_view_pos_mrp" model="ir.ui.view">
+        <field name="name">product.template.form.pos.mrp</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='inventory']" position="after">
+                <page string="POS Manufacturing" name="pos_mrp_integration" 
+                      groups="point_of_sale.group_pos_user,mrp.group_mrp_user">
+                    <group>
+                        <group string="POS Manufacturing Configuration">
+                            <field name="pos_mrp_enabled" widget="boolean_toggle"/>
+                            <field name="pos_mrp_ready" readonly="1" 
+                                   invisible="not pos_mrp_enabled"
+                                   widget="boolean_toggle"/>
+                            <field name="pos_mrp_auto_confirm" 
+                                   invisible="not pos_mrp_enabled"
+                                   widget="boolean_toggle"/>
+                            <field name="pos_mrp_check_availability" 
+                                   invisible="not pos_mrp_enabled"
+                                   widget="boolean_toggle"/>
+                        </group>
+                        <group string="Bill of Materials" invisible="not pos_mrp_enabled">
+                            <field name="pos_bom_id" 
+                                   options="{'no_create': True}"
+                                   context="{'default_product_tmpl_id': id}"/>
+                            <field name="pos_bom_count" invisible="1"/>
+                            <button name="action_view_pos_bom" 
+                                    type="object" 
+                                    string="View/Create BOMs"
+                                    class="oe_link"
+                                    icon="fa-list"/>
+                        </group>
+                    </group>
+                    <group invisible="not pos_mrp_enabled">
+                        <div class="alert alert-info" role="alert" 
+                             invisible="pos_mrp_ready">
+                            <strong>Configuration Required:</strong>
+                            This product needs a valid Bill of Materials (BOM) to enable 
+                            manufacturing from POS. Click "View/Create BOMs" to set one up.
+                        </div>
+                        <div class="alert alert-success" role="alert" 
+                             invisible="not pos_mrp_ready">
+                            <strong>Ready for POS Manufacturing:</strong>
+                            This product is properly configured. A Manufacturing Order will be 
+                            automatically created when sold through Point of Sale.
+                        </div>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product Template Tree View Extension -->
+    <record id="product_template_tree_view_pos_mrp" model="ir.ui.view">
+        <field name="name">product.template.tree.pos.mrp</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="pos_mrp_enabled" string="POS MFG" optional="hide"/>
+                <field name="pos_mrp_ready" string="MFG Ready" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product Template Search View Extension -->
+    <record id="product_template_search_view_pos_mrp" model="ir.ui.view">
+        <field name="name">product.template.search.pos.mrp</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter name="pos_mrp_enabled" 
+                        string="POS Manufacturing Enabled" 
+                        domain="[('pos_mrp_enabled', '=', True)]"/>
+                <filter name="pos_mrp_ready" 
+                        string="POS Manufacturing Ready" 
+                        domain="[('pos_mrp_ready', '=', True)]"/>
+                <filter name="pos_mrp_not_ready" 
+                        string="POS MFG - Needs Config" 
+                        domain="[('pos_mrp_enabled', '=', True), ('pos_mrp_ready', '=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
